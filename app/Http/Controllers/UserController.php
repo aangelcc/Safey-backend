@@ -85,8 +85,34 @@ class UserController extends Controller
         //
     }
 
+    //User Authentication Code
+    private $user;
+    public function __construct(User $user){
+        $this->user = $user;
+    }
+
     /**
-     * Allows user loging using email/password
+     * Allows user registration
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+
+    public function register(Request $request){
+        $user = $this->user->create([
+            'dni' => $request->get('dni'),
+            'name' => $request->get('name'),
+            'surname' => $request->get('surname'),
+            'email' => $request->get('email'),
+            'password' => bcrypt($request->get('password')),
+            'birthday' => $request->get('birthday'),
+            'gender' => $request->get('gender')
+        ]);
+        return response()->json(['status'=>true,'message'=>'User created successfully','data'=>$user]);
+    }
+
+    /**
+     * Allows user logging using email/password
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response

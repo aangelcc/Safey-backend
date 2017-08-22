@@ -29,6 +29,8 @@ Route::get('/hashed', function(Request $request) {
 
 Route::post('auth/login', 'UserController@login');
 
+Route::post('auth/register', 'UserController@register');
+
 // All routes inside this group will be applied the jwt.auth middleware
 Route::group(['middleware' => 'jwt.auth'], function () {
     Route::resource('/users', 'UserController');
