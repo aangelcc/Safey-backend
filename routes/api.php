@@ -22,4 +22,14 @@ Route::get('/ping', function(Request $request) {
     return $request->all();
 });
 
-Route::resource('/users', 'UserController');
+Route::get('/hashed', function(Request $request) {
+    $plainPassword = $request->input('password');
+    return $plainPassword .' -> '. Hash::make($plainPassword) .' --- '. $request->bearerToken();
+});
+
+Route::post('auth/login', 'UserController@login');
+
+// All routes inside this group will be applied the jwt.auth middleware
+Route::group(['middleware' => 'jwt.auth'], function () {
+    Route::resource('/users', 'UserController');
+});
