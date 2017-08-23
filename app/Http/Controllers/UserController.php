@@ -106,7 +106,8 @@ class UserController extends Controller
             'email' => $request->get('email'),
             'password' => bcrypt($request->get('password')),
             'birthday' => $request->get('birthday'),
-            'gender' => $request->get('gender')
+            'gender' => $request->get('gender'),
+            'role' => 1,
         ]);
         return response()->json(['status'=>true,'message'=>'User created successfully','data'=>$user]);
     }
@@ -129,6 +130,17 @@ class UserController extends Controller
             return response()->json(['failed_to_create_token'], 500);
         }
         return response()->json(compact('token'));
+    }
+
+    /**
+     * Returns user associated with token
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function getAuthUser(Request $request){
+        $user = JWTAuth::toUser($request->token);
+        return response()->json(['result' => $user]);
     }
 
 }
