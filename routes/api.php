@@ -35,3 +35,5 @@ Route::post('auth/register', 'UserController@register');
 Route::group(['middleware' => 'jwt.auth'], function () {
     Route::resource('/users', 'UserController');
 });
+
+Route::resource('/comments', 'CommentController');

@@ -100,7 +100,7 @@ class UserController extends Controller
 
     public function register(Request $request){
         $user = $this->user->create([
-            'dni' => $request->get('dni'),
+            'personal_id' => $request->get('personal_id'),
             'name' => $request->get('name'),
             'surname' => $request->get('surname'),
             'email' => $request->get('email'),
