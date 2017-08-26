@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Comment;
 use Illuminate\Http\Request;
+use App\Order;
 
-class CommentController extends Controller
+class OrderController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,7 +14,7 @@ class CommentController extends Controller
      */
     public function index()
     {
-        return Comment::all();
+        //
     }
 
     /**
@@ -36,16 +36,19 @@ class CommentController extends Controller
     public function store(Request $request)
     {
         $this->validate($request,[
-            'comment'=>'nullable',
             'user_id'=>'required|exists:users,id',
-            'product_rating'=>'required|numeric',
-            'comment_rating'=>'nullable|numeric',
-            'product_id'=>'required|exists:products,id'
+            'url'=>'nullable',
+            'product_id'=>'nullable|exists:products,id',
+            'delivery_date'=>'nullable',
+            'observation'=>'nullable'
         ]);
-        $comment = new Comment($request->all());
-        $comment->comment_rating = 0;
-        $comment->save();
-        return response()->json(['status'=>true,'message'=>'Comment successfully created','data'=>$comment]);
+        $order = new Order($request->all());
+        $order->status = 1;
+        if($order->url===NULL && $order->product_id===NULL){
+            return response()->json(['status'=>true,'message'=>'url or product_id required','data'=>$order], 422);
+        }
+        $order->save();
+        return response()->json(['status'=>true,'message'=>'Order successfully created','data'=>$order]);
     }
 
     /**
@@ -80,16 +83,17 @@ class CommentController extends Controller
     public function update(Request $request, $id)
     {
         $this->validate($request,[
-            'comment'=>'nullable',
-            'product_rating'=>'required|numeric',
-            'comment_rating'=>'nullable|numeric',
+            'delivery_date'=>'nullable',
+            'observation'=>'nullable',
+            'status'=>'required|numeric'
         ]);
-        $comment = Comment::find($id);
-        $comment->comment = $request->input('comment');
-        $comment->product_rating = $request->input('product_rating');
-        $comment->comment_rating = $request->input('comment_rating');
-        $comment->save();
-        return response()->json(['status'=>true,'message'=>'Comment successfully update','data'=>$comment]);
+        $order = Order::find($id);
+        $order->delivery_date = $request->input('delivery_date');
+        $order->observation = $request->input('observation');
+        $order->status = $request->input('status');
+
+        $order->save();
+        return response()->json(['status'=>true,'message'=>'Order successfully updated','data'=>$order]);
     }
 
     /**
@@ -100,8 +104,8 @@ class CommentController extends Controller
      */
     public function destroy($id)
     {
-        $comment = Comment::find($id);
-        $comment->delete();
-        return response()->json(['status'=>true,'message'=>'Comment successfully deleted','data'=>$comment]);
+        $order = Order::find($id);
+        $order->delete();
+        return response()->json(['status'=>true,'message'=>'Order successfully deleted','data'=>$order]);
     }
 }
