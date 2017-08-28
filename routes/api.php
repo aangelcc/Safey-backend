@@ -39,3 +39,7 @@ Route::group(['middleware' => 'jwt.auth'], function () {
 Route::resource('/comments', 'CommentController');
 
 Route::resource('/orders', 'OrderController');
+
+Route::resource('/products', 'ProductController');
+
+Route::resource('/stores', 'StoreController');
