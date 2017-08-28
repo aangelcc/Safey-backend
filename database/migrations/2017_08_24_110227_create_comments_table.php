@@ -19,7 +19,7 @@ class CreateCommentsTable extends Migration
             $table->integer('user_id')->unsigned();
             $table->foreign('user_id')->references('id')->on('users');
             $table->tinyInteger('product_rating')->unsigned();
-            $table->tinyInteger('comment_rating')->unsigned();
+            $table->integer('comment_rating')->unsigned();
             $table->integer('product_id')->unsigned();
             $table->foreign('product_id')->references('id')->on('products');
             $table->timestamps();

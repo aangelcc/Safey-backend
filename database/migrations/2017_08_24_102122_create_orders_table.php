@@ -20,10 +20,10 @@ class CreateOrdersTable extends Migration
             $table->string('url')->nullable();
             $table->integer('product_id')->unsigned()->nullable();
             $table->foreign('product_id')->references('id')->on('products');
-            $table->timestamps();
             $table->dateTime('delivery_date')->nullable();
             $table->unsignedTinyInteger('status');
             $table->string('observation')->nullable();
+            $table->timestamps();
         });
     }
 
