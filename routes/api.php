@@ -43,3 +43,5 @@ Route::resource('/orders', 'OrderController');
 Route::resource('/products', 'ProductController');
 
 Route::resource('/stores', 'StoreController');
+
+ROute::get('/search','SearchProductController');
