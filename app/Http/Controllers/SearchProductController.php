@@ -15,10 +15,13 @@ class SearchProductController extends Controller
         if($request->input('max')!==NULL){
             $max=$request->input('max');
         }
-        //return Product::where('name','LIKE','%'.$request->input('keyword').'%')->pluck('name');
-        return Product::where('name','LIKE','%'.$request->input('keyword').'%')
-            ->orWhere('description','LIKE','%'.$request->input('keyword').'%')
-            ->whereBetween('price', [$min, $max])
-            ->get();
+        $searchQuery = Product::where(function($query) use ($request) {
+            $query->where('name', 'LIKE', '%'.$request->input('keyword').'%')
+                ->orWhere('description', 'LIKE', '%'.$request->input('keyword').'%');
+        })->whereBetween('price',[$min,$max]);
+        if($request->input('store_id')!==NULL){
+            $searchQuery->whereIn('store_id',explode(',',$request->input('store_id')));
+        }
+        return $searchQuery->paginate(5);
     }
 }
