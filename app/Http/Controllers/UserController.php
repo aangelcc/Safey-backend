@@ -16,7 +16,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        return User::all();
+        return User::paginate(5);
     }
 
     /**
@@ -71,7 +71,23 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $this->validate($request,[
+            'name'=>'required',
+            'surname'=>'required',
+            'email'=>'required|unique:users,email',
+            'password'=>'required',
+            'birthday'=>'required',
+            'gender'=>'nullable',
+        ]);
+        $user = User::find($id);
+        $user->name = $request->input('name');
+        $user->surname = $request->input('surname');
+        $user->email = $request->input('email');
+        $user->password = $request->input('password');
+        $user->birthday = $request->input('birthday');
+        $user->gender = $request->input('gender');
+        $user->save();
+        return response()->json(['status'=>true,'message'=>'User successfully update','data'=>$user]);
     }
 
     /**
@@ -82,13 +98,16 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $user = User::find($id);
+        $user->delete();
+        return response()->json(['status'=>true,'message'=>'User successfully deleted','data'=>$user]);
     }
 
     //User Authentication Code
     private $user;
     public function __construct(User $user){
         $this->user = $user;
+        $this->middleware('jwt.auth')->except(['register','show']);
     }
 
     /**

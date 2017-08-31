@@ -7,6 +7,9 @@ use App\Order;
 
 class OrderController extends Controller
 {
+    public function __construct(){
+        $this->middleware('jwt.auth');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -14,7 +17,7 @@ class OrderController extends Controller
      */
     public function index()
     {
-        //
+        return Order::paginate(5);
     }
 
     /**
@@ -59,7 +62,7 @@ class OrderController extends Controller
      */
     public function show($id)
     {
-        //
+        return Order::findOrFail($id);
     }
 
     /**

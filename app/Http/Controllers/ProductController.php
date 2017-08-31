@@ -7,6 +7,9 @@ use App\Product;
 
 class ProductController extends Controller
 {
+    public function __construct(){
+        $this->middleware('jwt.auth')->except(['index','show']);
+    }
     /**
      * Display a listing of the resource.
      *
@@ -14,7 +17,7 @@ class ProductController extends Controller
      */
     public function index()
     {
-        //
+        return Product::paginate(5);
     }
 
     /**
@@ -57,7 +60,7 @@ class ProductController extends Controller
      */
     public function show($id)
     {
-        //
+        return Product::findOrFail($id);
     }
 
     /**

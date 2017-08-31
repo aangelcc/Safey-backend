@@ -7,6 +7,9 @@ use App\Store;
 
 class StoreController extends Controller
 {
+    public function __construct(){
+        $this->middleware('jwt.auth')->except(['index','show']);
+    }
     /**
      * Display a listing of the resource.
      *
@@ -14,7 +17,7 @@ class StoreController extends Controller
      */
     public function index()
     {
-        //
+        return Store::paginate(5);
     }
 
     /**
@@ -59,7 +62,7 @@ class StoreController extends Controller
      */
     public function show($id)
     {
-        //
+        return Store::findOrFail($id);
     }
 
     /**

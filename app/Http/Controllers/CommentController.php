@@ -7,6 +7,9 @@ use Illuminate\Http\Request;
 
 class CommentController extends Controller
 {
+    public function __construct(){
+        $this->middleware('jwt.auth')->except(['index','show']);
+    }
     /**
      * Display a listing of the resource.
      *
@@ -14,7 +17,7 @@ class CommentController extends Controller
      */
     public function index()
     {
-        return Comment::all();
+        return Comment::paginate(5);
     }
 
     /**
@@ -56,7 +59,7 @@ class CommentController extends Controller
      */
     public function show($id)
     {
-        //
+        return Comment::findOrFail($id);
     }
 
     /**
