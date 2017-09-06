@@ -107,7 +107,7 @@ class UserController extends Controller
     private $user;
     public function __construct(User $user){
         $this->user = $user;
-        $this->middleware('jwt.auth')->except(['register','show']);
+        $this->middleware('jwt.auth')->except(['login','register','show']);
     }
 
     /**
