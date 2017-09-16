@@ -44,3 +44,5 @@ Route::resource('/stores', 'StoreController', ['only' => [ 'index', 'store','sho
 
 Route::get('/search','SearchProductController');
 
+Route::get('/product-comment', 'ProductCommentController');
+
