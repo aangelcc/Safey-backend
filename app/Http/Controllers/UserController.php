@@ -118,14 +118,15 @@ class UserController extends Controller
      */
 
     public function register(Request $request){
+        $data = $request->json()->all();
         $user = $this->user->create([
-            'personal_id' => $request->get('personal_id'),
-            'name' => $request->get('name'),
-            'surname' => $request->get('surname'),
-            'email' => $request->get('email'),
-            'password' => bcrypt($request->get('password')),
-            'birthday' => $request->get('birthday'),
-            'gender' => $request->get('gender'),
+            'personal_id' => $data['personal_id'],
+            'name' => $data['name'],
+            'surname' => $data['surname'],
+            'email' => $data['email'],
+            'password' => bcrypt($data['password']),
+            'birthday' => $data['birthday'],
+            'gender' => $data['gender'],
             'role' => 1,
         ]);
         return response()->json(['status'=>true,'message'=>'User created successfully','data'=>$user]);
@@ -139,7 +140,7 @@ class UserController extends Controller
      */
     public function login(Request $request)
     {
-        $credentials = $request->only('email', 'password');
+        $credentials = $request->json()->all();
         $token = null;
         try {
             if (!$token = JWTAuth::attempt($credentials)) {
