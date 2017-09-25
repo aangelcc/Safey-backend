@@ -6,6 +6,7 @@ use JWTAuth;
 use App\User;
 use JWTAuthException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -124,7 +125,7 @@ class UserController extends Controller
             'name' => $data['name'],
             'surname' => $data['surname'],
             'email' => $data['email'],
-            'password' => bcrypt($data['password']),
+            'password' => Hash::make($data['password']),
             'birthday' => $data['birthday'],
             'gender' => $data['gender'],
             'role' => 1,
@@ -142,6 +143,7 @@ class UserController extends Controller
     {
         $credentials = $request->json()->all();
         $token = null;
+
         try {
             if (!$token = JWTAuth::attempt($credentials)) {
                 return response()->json(['invalid_email_or_password'], 422);
@@ -149,7 +151,10 @@ class UserController extends Controller
         } catch (JWTAuthException $e) {
             return response()->json(['failed_to_create_token'], 500);
         }
-        return response()->json(compact('token'));
+        // Successful login, so assigned
+        $user = JWTAuth::toUser($token);
+
+        return response()->json(compact('token','user'));
     }
 
     /**
@@ -159,8 +164,7 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function getAuthUser(Request $request){
-        $user = JWTAuth::toUser($request->token);
-        return response()->json(['result' => $user]);
+        return JWTAuth::toUser($request->token);
     }
 
 }

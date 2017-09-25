@@ -20,7 +20,7 @@ class UsersTableSeeder extends Seeder
                 'name' => $faker->name,
                 'surname' => $faker->lastName,
                 'email' => $faker->unique()->email,
-                'password' => bcrypt($faker->password()),
+                'password' => bcrypt('123'),
                 'birthday' => $faker->date(),
                 'gender' => 'M',
                 'role' => '1'
