@@ -19,7 +19,7 @@ class VerifyJWTToken
     {
         try{
             $user = JWTAuth::toUser($request->bearerToken());
-            return response()->json($user);
+            //return response()->json($user);
         }catch (JWTException $e) {
             if($e instanceof TokenExpiredException) {
                 return response()->json(['token_expired'], $e->getStatusCode());
